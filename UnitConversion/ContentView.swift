@@ -9,24 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     
-    enum LengthUnit {
-        case Meters
-        case KiloMeters
-        case Feet
-        case Yard
-        case Miles
+    enum LengthUnit: String, CaseIterable {
+        case Meters = "meters"
+        case KiloMeters = "kilometers"
+        case Feet = "feet"
+        case Yard = "yard"
+        case Miles = "miles"
         
-        var title: String {
-            switch self {
-            case .Meters: return "meters"
-            case .KiloMeters: return "kilometers"
-            case .Feet: return "feet"
-            case .Yard: return "yard"
-            case .Miles: return "miles"
-            }
-        }
-        
-        var multiplyNumberToMeters: Double {
+        var metersMultiplier: Double {
             switch self {
             case .Meters: return 1.0
             case .KiloMeters: return 1000.0
@@ -75,8 +65,8 @@ struct ContentView: View {
                 Section {
                     
                     Picker("Input Unit", selection: $selectedInputUnit) {
-                        ForEach(lengthUnits, id: \.self) {
-                            Text($0.title)
+                        ForEach(LengthUnit.allCases, id: \.self) {
+                            Text($0.rawValue)
                         }
                     }
                     .pickerStyle(.menu)
@@ -93,18 +83,18 @@ struct ContentView: View {
                 Section {
                     
                     Picker("Output Unit", selection: $selectedOutputUnit) {
-                        ForEach(lengthUnits, id: \.self) {
-                            Text($0.title)
+                        ForEach(LengthUnit.allCases, id: \.self) {
+                            Text($0.rawValue)
                         }
                     }
                     .pickerStyle(.menu)
 
-                    
                 } header: {
                     Text("Output Length")
                 }
                 
                 Section {
+                    
                     Text(convertedResult, format: .number)
                 } header: {
                     Text("Converted Length Amount")
