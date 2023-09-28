@@ -16,13 +16,13 @@ struct ContentView: View {
         case Yard = "yard"
         case Miles = "miles"
         
-        var metersMultiplier: Double {
+        var formalUnitLength: UnitLength {
             switch self {
-            case .Meters: return 1.0
-            case .KiloMeters: return 1000.0
-            case .Feet: return 0.3048
-            case .Yard: return 0.9144
-            case .Miles: return 1609.344
+            case .Meters: return UnitLength.meters
+            case .KiloMeters: return UnitLength.kilometers
+            case .Feet: return UnitLength.feet
+            case .Yard: return UnitLength.yards
+            case .Miles: return UnitLength.miles
             }
         }
     }
@@ -33,12 +33,10 @@ struct ContentView: View {
     
     @FocusState private var amountIsFocused: Bool
 
-    var convertedResult: Double {
-        
-        let inputToMeters = inputAmount * selectedInputUnit.metersMultiplier
-        let convertedNumber = inputToMeters / selectedOutputUnit.metersMultiplier
-        
-        return convertedNumber
+    var convertedResult: String {
+        let inputValue = Measurement(value: inputAmount, unit: selectedInputUnit.formalUnitLength)
+        let convertedNumber = inputValue.converted(to: selectedOutputUnit.formalUnitLength)
+        return "\(convertedNumber.value) \(selectedOutputUnit.formalUnitLength.symbol)"
     }
     
     var body: some View {
@@ -80,7 +78,7 @@ struct ContentView: View {
                 
                 Section {
                     
-                    Text(convertedResult, format: .number)
+                    Text(convertedResult)
                 } header: {
                     Text("Converted Length Amount")
                 }
