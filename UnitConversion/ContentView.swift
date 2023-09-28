@@ -52,11 +52,63 @@ struct ContentView: View {
     }
     
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        
+        NavigationView {
+            
+            Form {
+                
+                Section {
+                    
+                    Picker("Input Unit", selection: $selectedInputUnit) {
+                        ForEach(lengthUnits, id: \.self) {
+                            Text($0.title)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    
+                    TextField("Amount", value: $inputAmount, format: .number)
+                        .keyboardType(.decimalPad)
+                        .focused($amountIsFocused)
+                    
+                } header: {
+                    Text("Input Length")
+                }
+                
+                
+                Section {
+                    
+                    Picker("Output Unit", selection: $selectedOutputUnit) {
+                        ForEach(lengthUnits, id: \.self) {
+                            Text($0.title)
+                        }
+                    }
+                    .pickerStyle(.menu)
+
+                    
+                } header: {
+                    Text("Output Length")
+                }
+                
+                Section {
+                    Text(convertedResult, format: .number)
+                } header: {
+                    Text("Converted Length Amount")
+                }
+                
+                
+            }
+            .navigationTitle("Length Conversion")
+            .navigationBarTitleDisplayMode(.automatic)
+            
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    
+                    Button("Done") {
+                        amountIsFocused = false
+                    }
+                }
+            }
         }
     }
 }
