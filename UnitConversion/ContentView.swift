@@ -25,20 +25,8 @@ struct ContentView: View {
             case .Miles: return 1609.344
             }
         }
-        
-        var multiplyNumberToSelectedOutputUnit: Double {
-            switch self {
-            case .Meters: return 1.0
-            case .KiloMeters: return 0.001
-            case .Feet: return 3.28084
-            case .Yard: return 1.093613
-            case .Miles: return 0.000621
-            }
-        }
     }
-    
-    let lengthUnits: [LengthUnit] = [.Meters, .KiloMeters, .Feet, .Yard, .Miles]
-    
+        
     @State private var selectedInputUnit = LengthUnit.Meters
     @State private var selectedOutputUnit = LengthUnit.Meters
     @State private var inputAmount = 0.0
@@ -47,11 +35,8 @@ struct ContentView: View {
 
     var convertedResult: Double {
         
-        // conversion to meters
-        let convertedToMeters = inputAmount * selectedInputUnit.multiplyNumberToMeters
-        
-        // conversion to selected output unit
-        let convertedNumber = convertedToMeters * selectedOutputUnit.multiplyNumberToSelectedOutputUnit
+        let inputToMeters = inputAmount * selectedInputUnit.metersMultiplier
+        let convertedNumber = inputToMeters / selectedOutputUnit.metersMultiplier
         
         return convertedNumber
     }
